@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KIỂM KÊ TÀI SẢN — Đan Ngẫu · Ngân Khố</title>
+  
+  <!-- Font Lora (Việt hóa) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- html2canvas for Receipt Image Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & ARCHIVAL THEME (ĐAN NGẪU · NGÂN KHỐ)
+       ========================================================================== */
+    :root {
+      --bg-dark: #100b0c;
+      --bg-wood-dark: #1c1012;
+      --bg-card: #241517;
+      --vermilion: #d63828;
+      --vermilion-glow: rgba(214, 56, 40, 0.35);
+      --crimson-dark: #7a1519;
+      --burgundy: #4a0e13;
+      --brass: #c5a059;
+      --brass-bright: #e5c178;
+      --brass-muted: #8c6f3e;
+      --porcelain: #f7f5f0;
+      --ivory: #e8dfcc;
+      --text-muted: #a69888;
+      --border-brass: rgba(197, 160, 89, 0.25);
+      --border-red: rgba(214, 56, 40, 0.3);
+      --font-main: 'Lora', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--ivory);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, #2b1418 0%, var(--bg-dark) 70%);
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 3rem;
+    }
+
+    /* Grid Overlay background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        radial-gradient(rgba(197, 160, 89, 0.05) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 24px 24px, 40px 40px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-wood-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--brass-muted); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--brass); }
+
+    /* Layout Containers */
+    .app-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* HEADER */
+    .main-header {
+      border-bottom: 1px solid var(--border-brass);
+      background: rgba(20, 11, 12, 0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.75rem 0;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .gear-seal {
+      width: 36px;
+      height: 36px;
+      fill: none;
+      stroke: var(--brass-bright);
+      stroke-width: 1.5;
+      animation: rotateGear 25s linear infinite;
+    }
+
+    @keyframes rotateGear {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--porcelain);
+      letter-spacing: 0.08em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      color: var(--brass);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    /* Nav Links */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      color: var(--brass-bright);
+      border-color: var(--border-brass);
+      background: rgba(197, 160, 89, 0.08);
+    }
+
+    /* Role Switcher Badge */
+    .role-switcher {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(122, 21, 25, 0.3);
+      border: 1px solid var(--border-red);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .role-select {
+      background: transparent;
+      border: none;
+      color: var(--brass-bright);
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ARCHIVAL CARDS */
+    .archival-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-brass);
+      border-radius: 2px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      margin-bottom: 2rem;
+    }
+
+    .archival-card::before {
+      content: '';
+      position: absolute;
+      top: 4px; left: 4px; right: 4px; bottom: 4px;
+      border: 1px solid rgba(197, 160, 89, 0.08);
+      pointer-events: none;
+    }
+
+    .card-corner {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-color: var(--brass);
+      border-style: solid;
+    }
+    .corner-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    /* DASHBOARD METRICS */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+      background: rgba(28, 16, 18, 0.8);
+      border: 1px solid var(--border-brass);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--brass-bright);
+      margin: 0.2rem 0;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* FORM STYLES */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--brass-bright);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(16, 11, 12, 0.8);
+      border: 1px solid var(--border-brass);
+      color: var(--porcelain);
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--brass-bright);
+      box-shadow: 0 0 8px rgba(229, 193, 120, 0.2);
+    }
+
+    .error-msg {
+      color: var(--vermilion);
+      font-size: 0.78rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    /* RADIO & CHECKBOX OPTIONS */
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .custom-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(197, 160, 89, 0.15);
+      padding: 0.6rem 0.8rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: background 0.3s;
+    }
+
+    .custom-option:hover {
+      background: rgba(197, 160, 89, 0.06);
+    }
+
+    .custom-option input[type="radio"],
+    .custom-option input[type="checkbox"] {
+      accent-color: var(--vermilion);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* REALTIME AUDIT DISPLAY */
+    .audit-summary-box {
+      background: radial-gradient(circle at center, #2d1417 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border-red);
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .audit-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px dotted rgba(197, 160, 89, 0.2);
+      font-size: 0.9rem;
+    }
+
+    .audit-row.grand-total {
+      border-bottom: none;
+      border-top: 2px solid var(--vermilion);
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+    }
+
+    .grand-total-val {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--vermilion);
+      text-shadow: 0 0 15px var(--vermilion-glow);
+    }
+
+    .step-explain {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.2rem;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--crimson-dark) 0%, var(--vermilion) 100%);
+      border: 1px solid var(--brass);
+      color: var(--porcelain);
+      padding: 0.85rem 1.8rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(214, 56, 40, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(214, 56, 40, 0.5);
+      border-color: var(--brass-bright);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-brass);
+      color: var(--brass-bright);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(197, 160, 89, 0.1);
+      border-color: var(--brass-bright);
+    }
+
+    /* MULTI-PARTICIPANT TABLE */
+    .participant-item {
+      background: rgba(16, 11, 12, 0.6);
+      border: 1px solid var(--border-brass);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .btn-remove {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      color: var(--vermilion);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* RECEIPT / BILL STYLING (ARCHIVAL RECEIPT) */
+    .receipt-modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .receipt-modal-backdrop.active {
+      display: flex;
+    }
+
+    .receipt-card {
+      background: #180f11;
+      border: 2px solid var(--brass);
+      width: 100%;
+      max-width: 480px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0,0,0,0.9);
+      color: var(--porcelain);
+      background-image: radial-gradient(rgba(197, 160, 89, 0.05) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 2px dashed var(--border-brass);
+      padding-bottom: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .receipt-seal {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--brass);
+      text-transform: uppercase;
+    }
+
+    .receipt-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--porcelain);
+      margin: 0.3rem 0;
+    }
+
+    .receipt-code {
+      font-size: 0.8rem;
+      color: var(--vermilion);
+      letter-spacing: 0.1em;
+    }
+
+    .receipt-body-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .receipt-divider {
+      border-bottom: 1px dotted rgba(197, 160, 89, 0.3);
+      margin: 1rem 0;
+    }
+
+    .receipt-total-box {
+      border: 1px solid var(--vermilion);
+      background: rgba(214, 56, 40, 0.1);
+      padding: 1rem;
+      text-align: center;
+      margin: 1.2rem 0;
+    }
+
+    .receipt-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    /* HISTORY TABLE */
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .history-table th, .history-table td {
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+      text-align: left;
+    }
+
+    .history-table th {
+      color: var(--brass-bright);
+      font-weight: 600;
+      border-bottom-color: var(--border-brass);
+    }
+
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    /* PRINT MEDIA STYLES */
+    @media print {
+      body * { visibility: hidden; }
+      .receipt-card, .receipt-card * { visibility: visible; }
+      .receipt-card { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+      .receipt-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GLOBAL HEADER -->
+  <header class="main-header">
+    <div class="app-container">
+      <div class="header-inner">
+        <div class="brand-box">
+          <svg class="gear-seal" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <div>
+            <div class="brand-title">KIỂM KÊ TÀI SẢN</div>
+            <div class="brand-subtitle">Đan Ngẫu · Ngân Khố Tài Sản</div>
+          </div>
+        </div>
+
+        <ul class="nav-tabs">
+          <li><button class="tab-btn active" onclick="switchTab('dashboard')">Tổng Quan</button></li>
+          <li><button class="tab-btn" onclick="switchTab('calculator')">Hạch Toán</button></li>
+          <li><button class="tab-btn" onclick="switchTab('history')">Sổ Cái Ngẫu</button></li>
+        </ul>
+
+        <div class="role-switcher">
+          <span style="color: var(--text-muted);">Tư cách:</span>
+          <select class="role-select" id="userRoleSelect" onchange="handleRoleChange()">
+            <option value="resident">Cư Dân</option>
+            <option value="mod" selected>Mod (Quản lý)</option>
+            <option value="qtv">QTV (Toàn quyền)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTENT -->
+  <main class="app-container" style="margin-top: 2rem;">
+
+    <!-- ==========================================================================
+       SECTION 1: DASHBOARD
+       ========================================================================== -->
+    <section id="sec-dashboard" class="page-section active">
+      <div class="dashboard-grid">
+        <div class="metric-card">
+          <div class="metric-label">Tổng Ngẫu Đã Hạch Toán</div>
+          <div class="metric-value" id="dashTotalNgau">0</div>
+          <span style="font-size: 0.75rem; color: var(--brass);">Tài sản lưu thông</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Số Phiếu Đã Xuất</div>
+          <div class="metric-value" id="dashTotalBills">0</div>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Hồ sơ lưu trữ</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Tổng Số Chữ RP</div>
+          <div class="metric-value" id="dashTotalWords">0</div>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Lao động hợp lệ</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Số Chuỗi Role</div>
+          <div class="metric-value" id="dashTotalRoles">0</div>
+          <span style="font-size: 0.75rem; color: var(--brass-bright);">Sự kiện ghi nhận</span>
+        </div>
+      </div>
+
+      <div class="archival-card">
+        <div class="card-corner corner-tl"></div><div class="card-corner corner-tr"></div>
+        <div class="card-corner corner-bl"></div><div class="card-corner corner-br"></div>
+        <h3 style="color: var(--brass-bright); margin-bottom: 0.5rem;">Hệ Thống Kiểm Kê Tài Sản Đan Ngẫu</h3>
+        <p style="font-size: 0.95rem; color: var(--ivory);">
+          Chào mừng đến với cơ quan Hạch toán thuộc Ngân khố Đan Ngẫu. Công cụ này được vận hành tự động theo đúng <strong>Thuật toán Kế toán Canon</strong> để kiểm tra, tính toán lượng Ngẫu phát hành dựa trên sức lao động viết văn của cư dân.
+        </p>
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn-primary" onclick="switchTab('calculator')">✦ Khởi Tạo Phiếu Hạch Toán Mới</button>
+          <button class="btn-secondary" onclick="switchTab('history')">📜 Xem Sổ Cái Lịch Sử</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+       SECTION 2: HẠCH TOÁN CALCULATOR FORM
+       ========================================================================== -->
+    <section id="sec-calculator" class="page-section">
+      <div class="archival-card">
+        <div class="card-corner corner-tl"></div><div class="card-corner corner-tr"></div>
+        <div class="card-corner corner-bl"></div><div class="card-corner corner-br"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="color: var(--porcelain);">KHỞI TẠO PHIẾU HẠCH TOÁN</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Hạch toán chính xác theo công thức Ngân Khố Đan Ngẫu</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;" id="calcModeToggleBox">
+            <button class="btn-secondary" id="btnSingleMode" onclick="setCalcMode('single')" style="border-color: var(--brass-bright);">Đơn Cư Dân</button>
+            <button class="btn-secondary" id="btnMultiMode" onclick="setCalcMode('multi')">Nhiều Cư Dân (Chuỗi Role)</button>
+          </div>
+        </div>
+
+        <!-- FORM SINGLE RESIDENT MODE -->
+        <div id="singleCalcForm" class="form-grid">
+          <div>
+            <div class="form-group">
+              <label class="form-label">Tên Cư Dân (*)</label>
+              <input type="text" id="sCitizenName" class="form-control" placeholder="Ví dụ: Cư dân A" oninput="calculateRealtimeSingle()" />
+              <div class="error-msg" id="errCitizenName">Vui lòng nhập tên cư dân</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tên Chuỗi Role (*)</label>
+              <input type="text" id="sRoleTitle" class="form-control" placeholder="Ví dụ: Đại Hội Đan Ngẫu" oninput="calculateRealtimeSingle()" />
+              <div class="error-msg" id="errRoleTitle">Vui lòng nhập tên Role</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tổng Số Chữ Toàn Role (*)</label>
+              <input type="number" id="sTotalRoleWords" class="form-control" placeholder="5000" min="1" oninput="calculateRealtimeSingle()" />
+              <div class="error-msg" id="errTotalRoleWords">Tổng số chữ phải lớn hơn 0</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Số Chữ Cá Nhân Hợp Lệ (*)</label>
+              <input type="number" id="sPersonalWords" class="form-control" placeholder="3000" min="1" oninput="calculateRealtimeSingle()" />
+              <div class="error-msg" id="errPersonalWords">Số chữ cá nhân không hợp lệ</div>
+            </div>
+          </div>
+
+          <div>
+            <!-- Người mở role -->
+            <div class="form-group">
+              <label class="form-label">Phụ Cấp Khởi Tạo (Mở Role)</label>
+              <div class="radio-group">
+                <label class="custom-option">
+                  <input type="radio" name="sRoleCreator" value="none" checked onchange="calculateRealtimeSingle()" />
+                  <span>Không phải người mở Role (+0 Ngẫu)</span>
+                </label>
+                <label class="custom-option">
+                  <input type="radio" name="sRoleCreator" value="normal" onchange="calculateRealtimeSingle()" />
+                  <span>Mở Role thông thường (+50 Ngẫu)</span>
+                </label>
+                <label class="custom-option">
+                  <input type="radio" name="sRoleCreator" value="event" onchange="calculateRealtimeSingle()" />
+                  <span>Mở Role sự kiện / QTV yêu cầu (+100 Ngẫu)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Nhiệm vụ -->
+            <div class="form-group">
+              <label class="form-label">Phụ Cấp Công Vụ (Nhiệm Vụ)</label>
+              <label class="custom-option">
+                <input type="checkbox" id="sHasQuest" onchange="toggleQuestInputSingle(); calculateRealtimeSingle();" />
+                <span>Hoàn thành nhiệm vụ đặc thù</span>
+              </label>
+              <div id="sQuestAmountBox" style="margin-top: 0.5rem; display: none;">
+                <input type="number" id="sQuestBonus" class="form-control" placeholder="Nhập số Ngẫu thưởng (VD: 200)" min="0" oninput="calculateRealtimeSingle()" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM MULTI-PARTICIPANT MODE -->
+        <div id="multiCalcForm" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="form-group">
+              <label class="form-label">Tên Chuỗi Role (*)</label>
+              <input type="text" id="mRoleTitle" class="form-control" placeholder="Ví dụ: Đại Hội Đan Ngẫu" oninput="calculateRealtimeMulti()" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tổng Số Chữ Chuỗi Role (Tự động cộng dồn hoặc tự nhập)</label>
+              <input type="number" id="mTotalRoleWords" class="form-control" placeholder="Tự động tính từ cư dân" oninput="calculateRealtimeMulti()" />
+            </div>
+          </div>
+
+          <h4 style="color: var(--brass-bright); margin-bottom: 1rem;">Danh Sách Cư Dân Tham Gia</h4>
+          <div id="multiParticipantsContainer">
+            <!-- Dynamic participant rows inserted here -->
+          </div>
+          <button class="btn-secondary" onclick="addParticipantRow()">+ Thêm Cư Dân Tham Gia</button>
+        </div>
+
+        <!-- REALTIME AUDIT EXPLANATION CARD -->
+        <div class="audit-summary-box">
+          <h4 style="color: var(--brass-bright); margin-bottom: 0.8rem;">Kiểm Toán Hạch Toán Real-time</h4>
+          
+          <div class="audit-row">
+            <span>Ngẫu Cơ Sở (1 chữ = 1 Ngẫu)</span>
+            <span id="resBaseNgau" style="color: var(--porcelain);">0 Ngẫu</span>
+          </div>
+          <div class="step-explain" id="expBaseNgau">0 chữ × 1 Ngẫu</div>
+
+          <div class="audit-row">
+            <span>Tỷ Lệ Đóng Góp & Hệ Số</span>
+            <span id="resContributionRate" style="color: var(--porcelain);">0% (+0%)</span>
+          </div>
+          <div class="step-explain" id="expContributionRate">0 / 0 chữ = 0%</div>
+
+          <div class="audit-row">
+            <span>Thưởng Đóng Góp (Ngẫu Cơ Sở × Hệ Số)</span>
+            <span id="resContributionBonus" style="color: var(--porcelain);">+0 Ngẫu</span>
+          </div>
+          <div class="step-explain" id="expContributionBonus">0 Ngẫu × 0%</div>
+
+          <div class="audit-row">
+            <span>Thưởng Mở Role</span>
+            <span id="resRoleBonus" style="color: var(--porcelain);">+0 Ngẫu</span>
+          </div>
+
+          <div class="audit-row">
+            <span>Thưởng Nhiệm Vụ</span>
+            <span id="resQuestBonus" style="color: var(--porcelain);">+0 Ngẫu</span>
+          </div>
+
+          <div class="audit-row grand-total">
+            <span style="font-size: 1.1rem; font-weight: 700; color: var(--porcelain);">TỔNG THU NHẬP</span>
+            <span class="grand-total-val" id="resTotalNgau">0 NGẪU</span>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div style="margin-top: 1.5rem; text-align: right;">
+          <button class="btn-primary" onclick="submitAccountingProcess()">✦ HẠCH TOÁN & XUẤT PHIẾU (BILL)</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+       SECTION 3: HISTORY / SỔ CÁI NGẪU
+       ========================================================================== -->
+    <section id="sec-history" class="page-section">
+      <div class="archival-card">
+        <div class="card-corner corner-tl"></div><div class="card-corner corner-tr"></div>
+        <div class="card-corner corner-bl"></div><div class="card-corner corner-br"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <h2 style="color: var(--porcelain);">SỔ CÁI NGẪU (LỊCH SỬ HẠCH TOÁN)</h2>
+          
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="historySearchInput" class="form-control" placeholder="Tìm theo tên/mã phiếu/Role..." style="width: 240px; padding: 0.4rem 0.8rem;" oninput="renderHistoryTable()" />
+            <button class="btn-secondary" onclick="clearAllHistory()" id="btnClearHistory" style="color: var(--vermilion); border-color: var(--border-red);">Xóa Lịch Sử</button>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Mã Phiếu</th>
+                <th>Cư Dân</th>
+                <th>Tên Role</th>
+                <th>Số Chữ</th>
+                <th>Đóng Góp</th>
+                <th>Tổng Ngẫu</th>
+                <th>Ngày Tạo</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       RECEIPT MODAL (PHIẾU HẠCH TOÁN ARCHIVAL RECEIPT)
+       ========================================================================== -->
+  <div class="receipt-modal-backdrop" id="receiptModal">
+    <div class="receipt-card" id="printableReceipt">
+      <div class="receipt-header">
+        <div class="receipt-seal">ĐAN NGẪU · NGÂN KHỐ TÀI SẢN</div>
+        <div class="receipt-title">KIỂM KÊ TÀI SẢN</div>
+        <div class="receipt-code" id="recBillCode">DN-20260918-0000</div>
+      </div>
+
+      <div class="receipt-body-row">
+        <span style="color: var(--text-muted);">CƯ DÂN:</span>
+        <strong id="recCitizenName" style="color: var(--brass-bright);">---</strong>
+      </div>
+      <div class="receipt-body-row">
+        <span style="color: var(--text-muted);">TÊN ROLE:</span>
+        <span id="recRoleTitle">---</span>
+      </div>
+      <div class="receipt-body-row">
+        <span style="color: var(--text-muted);">NGÀY HẠCH TOÁN:</span>
+        <span id="recDate">---</span>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-body-row">
+        <span>Ngẫu Cơ Sở (<span id="recWords">0</span> chữ):</span>
+        <span id="recBaseNgau">0 Ngẫu</span>
+      </div>
+      <div class="receipt-body-row">
+        <span>Tỷ lệ đóng góp (<span id="recPercent">0%</span>):</span>
+        <span id="recContribRate">+0%</span>
+      </div>
+      <div class="receipt-body-row">
+        <span>Thưởng đóng góp:</span>
+        <span id="recContribBonus">+0 Ngẫu</span>
+      </div>
+      <div class="receipt-body-row">
+        <span>Thưởng mở Role:</span>
+        <span id="recRoleBonus">+0 Ngẫu</span>
+      </div>
+      <div class="receipt-body-row">
+        <span>Thưởng nhiệm vụ:</span>
+        <span id="recQuestBonus">+0 Ngẫu</span>
+      </div>
+
+      <div class="receipt-total-box">
+        <div style="font-size: 0.75rem; color: var(--brass); letter-spacing: 0.15em;">TỔNG THU NHẬP DỰ KIẾN</div>
+        <div style="font-size: 2.2rem; font-weight: 700; color: var(--vermilion);" id="recTotalNgau">0 NGẪU</div>
+      </div>
+
+      <div style="text-align: center; font-size: 0.75rem; color: var(--text-muted);">
+        TRẠNG THÁI: <strong style="color: #4cd137;">ĐÃ HẠCH TOÁN NGÂN KHỐ</strong>
+      </div>
+
+      <div class="receipt-actions">
+        <button class="btn-primary" onclick="window.print()">🖨 IN PHIẾU</button>
+        <button class="btn-secondary" onclick="exportReceiptAsImage()">🖼 TẢI ẢNH BILL</button>
+        <button class="btn-secondary" onclick="copyReceiptText()">📋 SAO CHÉP TEXT</button>
+        <button class="btn-secondary" onclick="closeReceiptModal()" style="color: var(--vermilion);">ĐÓNG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT ARCHITECTURE & LOGIC
+       ========================================================================== -->
+  <script>
+    /* LOCAL STORAGE KEY */
+    const STORAGE_KEY = 'DAN_NGAU_TREASURY_BILLS_V1';
+
+    /* STATE MANAGEMENT */
+    let currentCalcMode = 'single'; // 'single' or 'multi'
+    let multiParticipantCount = 0;
+    let activeReceiptData = null;
+
+    /* INITIALIZATION */
+    window.addEventListener('DOMContentLoaded', () => {
+      initMultiParticipants();
+      calculateRealtimeSingle();
+      renderDashboardMetrics();
+      renderHistoryTable();
+    });
+
+    /* TAB SWITCHING */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById('sec-' + tabId).classList.add('active');
+
+      if (tabId === 'dashboard') renderDashboardMetrics();
+      if (tabId === 'history') renderHistoryTable();
+    }
+
+    /* ROLE PERMISSION SWITCHER */
+    function handleRoleChange() {
+      const role = document.getElementById('userRoleSelect').value;
+      const btnClear = document.getElementById('btnClearHistory');
+      if (role === 'resident') {
+        btnClear.style.display = 'none';
+      } else {
+        btnClear.style.display = 'inline-block';
+      }
+    }
+
+    /* MODE TOGGLES */
+    function setCalcMode(mode) {
+      currentCalcMode = mode;
+      const btnS = document.getElementById('btnSingleMode');
+      const btnM = document.getElementById('btnMultiMode');
+      const formS = document.getElementById('singleCalcForm');
+      const formM = document.getElementById('multiCalcForm');
+
+      if (mode === 'single') {
+        btnS.style.borderColor = 'var(--brass-bright)';
+        btnM.style.borderColor = 'var(--border-brass)';
+        formS.style.display = 'grid';
+        formM.style.display = 'none';
+        calculateRealtimeSingle();
+      } else {
+        btnM.style.borderColor = 'var(--brass-bright)';
+        btnS.style.borderColor = 'var(--border-brass)';
+        formS.style.display = 'none';
+        formM.style.display = 'block';
+        calculateRealtimeMulti();
+      }
+    }
+
+    /* QUEST INPUT TOGGLE */
+    function toggleQuestInputSingle() {
+      const chk = document.getElementById('sHasQuest').checked;
+      document.getElementById('sQuestAmountBox').style.display = chk ? 'block' : 'none';
+    }
+
+    /* ==========================================================================
+       CANON ALGORITHM FUNCTIONS (STRICT COMPLIANCE)
+       ========================================================================== */
+    
+    // (1) Base Ngau
+    function calculateBaseNgau(words) {
+      return Math.max(0, parseInt(words) || 0);
+    }
+
+    // (2) Contribution Rate lookup
+    function getContributionRate(percent) {
+      if (percent < 10) return 0.00;
+      if (percent < 20) return 0.05;
+      if (percent < 30) return 0.10;
+      if (percent < 40) return 0.15;
+      if (percent < 50) return 0.20;
+      if (percent < 60) return 0.25;
+      return 0.30; // 60%+
+    }
+
+    // (3) Contribution Bonus calculation
+    function calculateContributionBonus(baseNgau, rate) {
+      return Math.round(baseNgau * rate);
+    }
+
+    // (4) Total Ngau Calculation
+    function calculateTotalNgau(base, contribBonus, roleBonus, questBonus) {
+      return base + contribBonus + roleBonus + questBonus;
+    }
+
+    /* ==========================================================================
+       REALTIME CALCULATION LOGIC — SINGLE MODE
+       ========================================================================== */
+    function calculateRealtimeSingle() {
+      if (currentCalcMode !== 'single') return;
+
+      const totalWords = parseInt(document.getElementById('sTotalRoleWords').value) || 0;
+      const personalWords = parseInt(document.getElementById('sPersonalWords').value) || 0;
+
+      // Creator Bonus
+      const creatorVal = document.querySelector('input[name="sRoleCreator"]:checked').value;
+      let roleBonus = 0;
+      if (creatorVal === 'normal') roleBonus = 50;
+      if (creatorVal === 'event') roleBonus = 100;
+
+      // Quest Bonus
+      const hasQuest = document.getElementById('sHasQuest').checked;
+      const questBonus = hasQuest ? (parseInt(document.getElementById('sQuestBonus').value) || 0) : 0;
+
+      // Algorithms
+      const baseNgau = calculateBaseNgau(personalWords);
+      const percent = totalWords > 0 ? (personalWords / totalWords) * 100 : 0;
+      const contribRate = getContributionRate(percent);
+      const contribBonus = calculateContributionBonus(baseNgau, contribRate);
+      const totalNgau = calculateTotalNgau(baseNgau, contribBonus, roleBonus, questBonus);
+
+      // DOM Updates
+      document.getElementById('resBaseNgau').innerText = baseNgau.toLocaleString() + ' Ngẫu';
+      document.getElementById('expBaseNgau').innerText = `${personalWords.toLocaleString()} chữ × 1 Ngẫu`;
+
+      document.getElementById('resContributionRate').innerText = `${percent.toFixed(1)}% (+${(contribRate * 100)}%)`;
+      document.getElementById('expContributionRate').innerText = `${personalWords.toLocaleString()} / ${totalWords.toLocaleString()} chữ`;
+
+      document.getElementById('resContributionBonus').innerText = `+${contribBonus.toLocaleString()} Ngẫu`;
+      document.getElementById('expContributionBonus').innerText = `${baseNgau.toLocaleString()} Ngẫu × ${(contribRate * 100)}%`;
+
+      document.getElementById('resRoleBonus').innerText = `+${roleBonus} Ngẫu`;
+      document.getElementById('resQuestBonus').innerText = `+${questBonus.toLocaleString()} Ngẫu`;
+
+      document.getElementById('resTotalNgau').innerText = `${totalNgau.toLocaleString()} NGẪU`;
+    }
+
+    /* ==========================================================================
+       REALTIME CALCULATION LOGIC — MULTI-PARTICIPANT MODE
+       ========================================================================== */
+    function initMultiParticipants() {
+      const container = document.getElementById('multiParticipantsContainer');
+      container.innerHTML = '';
+      multiParticipantCount = 0;
+      addParticipantRow('Cư dân A', 3000, 'event', 200);
+      addParticipantRow('Cư dân B', 2000, 'none', 200);
+    }
+
+    function addParticipantRow(defName = '', defWords = '', defRole = 'none', defQuest = 0) {
+      multiParticipantCount++;
+      const id = multiParticipantCount;
+      const container = document.getElementById('multiParticipantsContainer');
+
+      const div = document.createElement('div');
+      div.className = 'participant-item';
+      div.id = `partRow_${id}`;
+      div.innerHTML = `
+        <button class="btn-remove" onclick="removeParticipantRow(${id})">×</button>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label">Tên Cư Dân</label>
+            <input type="text" class="form-control part-name" value="${defName}" placeholder="Tên cư dân" oninput="calculateRealtimeMulti()" />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label">Số Chữ Cá Nhân</label>
+            <input type="number" class="form-control part-words" value="${defWords}" placeholder="Số chữ" oninput="calculateRealtimeMulti()" />
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label">Mở Role</label>
+            <select class="form-control part-role" onchange="calculateRealtimeMulti()">
+              <option value="none" ${defRole === 'none' ? 'selected' : ''}>Không (+0)</option>
+              <option value="normal" ${defRole === 'normal' ? 'selected' : ''}>Thường (+50)</option>
+              <option value="event" ${defRole === 'event' ? 'selected' : ''}>Sự kiện (+100)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label">Thưởng Nhiệm Vụ</label>
+            <input type="number" class="form-control part-quest" value="${defQuest}" placeholder="Ngẫu" oninput="calculateRealtimeMulti()" />
+          </div>
+        </div>
+        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--brass-bright);" class="part-result-summary">
+          --
+        </div>
+      `;
+      container.appendChild(div);
+      calculateRealtimeMulti();
+    }
+
+    function removeParticipantRow(id) {
+      const row = document.getElementById(`partRow_${id}`);
+      if (row) row.remove();
+      calculateRealtimeMulti();
+    }
+
+    function calculateRealtimeMulti() {
+      if (currentCalcMode !== 'multi') return;
+
+      const rows = document.querySelectorAll('.participant-item');
+      let autoTotalWords = 0;
+
+      rows.forEach(r => {
+        const w = parseInt(r.querySelector('.part-words').value) || 0;
+        autoTotalWords += w;
+      });
+
+      const userTotalWordsInput = parseInt(document.getElementById('mTotalRoleWords').value);
+      const totalWords = (!isNaN(userTotalWordsInput) && userTotalWordsInput > 0) ? userTotalWordsInput : autoTotalWords;
+
+      let grandTotalMultiNgau = 0;
+
+      rows.forEach(r => {
+        const name = r.querySelector('.part-name').value || 'Vô danh';
+        const words = parseInt(r.querySelector('.part-words').value) || 0;
+        const roleType = r.querySelector('.part-role').value;
+        const questBonus = parseInt(r.querySelector('.part-quest').value) || 0;
+
+        let roleBonus = 0;
+        if (roleType === 'normal') roleBonus = 50;
+        if (roleType === 'event') roleBonus = 100;
+
+        const baseNgau = calculateBaseNgau(words);
+        const percent = totalWords > 0 ? (words / totalWords) * 100 : 0;
+        const rate = getContributionRate(percent);
+        const contribBonus = calculateContributionBonus(baseNgau, rate);
+        const total = calculateTotalNgau(baseNgau, contribBonus, roleBonus, questBonus);
+
+        grandTotalMultiNgau += total;
+
+        r.querySelector('.part-result-summary').innerHTML = `
+          <strong>${name}</strong>: ${words.toLocaleString()} chữ (${percent.toFixed(1)}%) → Cơ sở: ${baseNgau.toLocaleString()} + Thưởng ĐG (+${(rate*100)}%): ${contribBonus.toLocaleString()} + Role: ${roleBonus} + NV: ${questBonus} = <strong style="color:var(--vermilion);">${total.toLocaleString()} NGẪU</strong>
+        `;
+      });
+
+      document.getElementById('resBaseNgau').innerText = autoTotalWords.toLocaleString() + ' Ngẫu (Tổng chữ)';
+      document.getElementById('expBaseNgau').innerText = `Tổng cộng từ ${rows.length} cư dân`;
+      document.getElementById('resTotalNgau').innerText = `${grandTotalMultiNgau.toLocaleString()} NGẪU`;
+    }
+
+    /* ==========================================================================
+       SUBMIT & RECEIPT GENERATION
+       ========================================================================== */
+    function submitAccountingProcess() {
+      let billData = null;
+
+      if (currentCalcMode === 'single') {
+        const cName = document.getElementById('sCitizenName').value.trim();
+        const rTitle = document.getElementById('sRoleTitle').value.trim();
+        const totalWords = parseInt(document.getElementById('sTotalRoleWords').value) || 0;
+        const personalWords = parseInt(document.getElementById('sPersonalWords').value) || 0;
+
+        if (!cName || !rTitle || totalWords <= 0 || personalWords <= 0) {
+          alert('Vui lòng điền đầy đủ và chính xác các trường thông tin bắt buộc.');
+          return;
+        }
+
+        if (personalWords > totalWords) {
+          alert('Số chữ cá nhân không thể lớn hơn tổng số chữ toàn Role.');
+          return;
+        }
+
+        const creatorVal = document.querySelector('input[name="sRoleCreator"]:checked').value;
+        let roleBonus = creatorVal === 'normal' ? 50 : (creatorVal === 'event' ? 100 : 0);
+        const hasQuest = document.getElementById('sHasQuest').checked;
+        const questBonus = hasQuest ? (parseInt(document.getElementById('sQuestBonus').value) || 0) : 0;
+
+        const baseNgau = calculateBaseNgau(personalWords);
+        const percent = (personalWords / totalWords) * 100;
+        const rate = getContributionRate(percent);
+        const contribBonus = calculateContributionBonus(baseNgau, rate);
+        const totalNgau = calculateTotalNgau(baseNgau, contribBonus, roleBonus, questBonus);
+
+        billData = {
+          code: generateBillCode(),
+          date: new Date().toLocaleString('vi-VN'),
+          citizenName: cName,
+          roleTitle: rTitle,
+          words: personalWords,
+          totalRoleWords: totalWords,
+          percent: percent.toFixed(1),
+          contribRate: (rate * 100),
+          baseNgau: baseNgau,
+          contribBonus: contribBonus,
+          roleBonus: roleBonus,
+          questBonus: questBonus,
+          totalNgau: totalNgau
+        };
+
+        saveBillToStorage(billData);
+        openReceiptModal(billData);
+
+      } else {
+        // Multi-participant batch submit
+        const rTitle = document.getElementById('mRoleTitle').value.trim() || 'Chuỗi Role Nhóm';
+        const rows = document.querySelectorAll('.participant-item');
+
+        if (rows.length === 0) {
+          alert('Vui lòng thêm ít nhất một cư dân.');
+          return;
+        }
+
+        rows.forEach(r => {
+          const cName = r.querySelector('.part-name').value.trim() || 'Cư dân';
+          const words = parseInt(r.querySelector('.part-words').value) || 0;
+          const roleType = r.querySelector('.part-role').value;
+          const questBonus = parseInt(r.querySelector('.part-quest').value) || 0;
+          
+          let autoTotalWords = 0;
+          rows.forEach(rowItem => autoTotalWords += (parseInt(rowItem.querySelector('.part-words').value) || 0));
+
+          let roleBonus = roleType === 'normal' ? 50 : (roleType === 'event' ? 100 : 0);
+          const baseNgau = calculateBaseNgau(words);
+          const percent = autoTotalWords > 0 ? (words / autoTotalWords) * 100 : 0;
+          const rate = getContributionRate(percent);
+          const contribBonus = calculateContributionBonus(baseNgau, rate);
+          const totalNgau = calculateTotalNgau(baseNgau, contribBonus, roleBonus, questBonus);
+
+          const itemBill = {
+            code: generateBillCode(),
+            date: new Date().toLocaleString('vi-VN'),
+            citizenName: cName,
+            roleTitle: rTitle,
+            words: words,
+            totalRoleWords: autoTotalWords,
+            percent: percent.toFixed(1),
+            contribRate: (rate * 100),
+            baseNgau: baseNgau,
+            contribBonus: contribBonus,
+            roleBonus: roleBonus,
+            questBonus: questBonus,
+            totalNgau: totalNgau
+          };
+
+          saveBillToStorage(itemBill);
+          billData = itemBill; // open last generated bill in preview
+        });
+
+        openReceiptModal(billData);
+      }
+    }
+
+    function generateBillCode() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `DN-${yyyy}${mm}${dd}-${rand}`;
+    }
+
+    /* RECEIPT MODAL FUNCTIONS */
+    function openReceiptModal(data) {
+      activeReceiptData = data;
+      document.getElementById('recBillCode').innerText = data.code;
+      document.getElementById('recCitizenName').innerText = data.citizenName;
+      document.getElementById('recRoleTitle').innerText = data.roleTitle;
+      document.getElementById('recDate').innerText = data.date;
+      document.getElementById('recWords').innerText = data.words.toLocaleString();
+      document.getElementById('recBaseNgau').innerText = data.baseNgau.toLocaleString() + ' Ngẫu';
+      document.getElementById('recPercent').innerText = data.percent + '%';
+      document.getElementById('recContribRate').innerText = '+' + data.contribRate + '%';
+      document.getElementById('recContribBonus').innerText = '+' + data.contribBonus.toLocaleString() + ' Ngẫu';
+      document.getElementById('recRoleBonus').innerText = '+' + data.roleBonus + ' Ngẫu';
+      document.getElementById('recQuestBonus').innerText = '+' + data.questBonus.toLocaleString() + ' Ngẫu';
+      document.getElementById('recTotalNgau').innerText = data.totalNgau.toLocaleString() + ' NGẪU';
+
+      document.getElementById('receiptModal').classList.add('active');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.remove('active');
+    }
+
+    function copyReceiptText() {
+      if (!activeReceiptData) return;
+      const d = activeReceiptData;
+      const text = `
+╔════════════════════════════════╗
+      ĐAN NGẪU · NGÂN KHỐ TÀI SẢN
+           KIỂM KÊ TÀI SẢN
+────────────────────────────────
+MÃ PHIẾU: ${d.code}
+CƯ DÂN: ${d.citizenName}
+ROLE: ${d.roleTitle}
+NGÀY: ${d.date}
+────────────────────────────────
+NGẪU CƠ SỞ: ${d.baseNgau.toLocaleString()} Ngẫu (${d.words.toLocaleString()} chữ)
+ĐÓNG GÓP: ${d.percent}% (+${d.contribRate}%)
+THƯỞNG ĐÓNG GÓP: +${d.contribBonus.toLocaleString()} Ngẫu
+THƯỞNG MỞ ROLE: +${d.roleBonus} Ngẫu
+THƯỞNG NHIỆM VỤ: +${d.questBonus.toLocaleString()} Ngẫu
+────────────────────────────────
+TỔNG THU NHẬP: ${d.totalNgau.toLocaleString()} NGẪU
+────────────────────────────────
+TRẠNG THÁI: ĐÃ HẠCH TOÁN NGÂN KHỐ
+╚════════════════════════════════╝
+      `;
+      navigator.clipboard.writeText(text.trim()).then(() => {
+        alert('Đã sao chép nội dung phiếu hạch toán!');
+      });
+    }
+
+    function exportReceiptAsImage() {
+      const card = document.getElementById('printableReceipt');
+      html2canvas(card, { backgroundColor: '#180f11' }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `${activeReceiptData.code}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    /* ==========================================================================
+       LOCALSTORAGE HISTORY MANAGEMENT
+       ========================================================================== */
+    function getBillsFromStorage() {
+      const str = localStorage.getItem(STORAGE_KEY);
+      return str ? JSON.parse(str) : [];
+    }
+
+    function saveBillToStorage(bill) {
+      const bills = getBillsFromStorage();
+      bills.unshift(bill); // latest first
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bills));
+    }
+
+    function clearAllHistory() {
+      if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử hạch toán?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderHistoryTable();
+        renderDashboardMetrics();
+      }
+    }
+
+    function renderDashboardMetrics() {
+      const bills = getBillsFromStorage();
+      let totalNgau = 0;
+      let totalWords = 0;
+      const rolesSet = new Set();
+
+      bills.forEach(b => {
+        totalNgau += b.totalNgau;
+        totalWords += b.words;
+        rolesSet.add(b.roleTitle);
+      });
+
+      document.getElementById('dashTotalNgau').innerText = totalNgau.toLocaleString();
+      document.getElementById('dashTotalBills').innerText = bills.length;
+      document.getElementById('dashTotalWords').innerText = totalWords.toLocaleString();
+      document.getElementById('dashTotalRoles').innerText = rolesSet.size;
+    }
+
+    function renderHistoryTable() {
+      const bills = getBillsFromStorage();
+      const tbody = document.getElementById('historyTableBody');
+      const search = (document.getElementById('historySearchInput').value || '').toLowerCase();
+
+      tbody.innerHTML = '';
+
+      const filtered = bills.filter(b => 
+        b.code.toLowerCase().includes(search) ||
+        b.citizenName.toLowerCase().includes(search) ||
+        b.roleTitle.toLowerCase().includes(search)
+      );
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--text-muted);">Chưa có dữ liệu hạch toán trong Sổ Cái.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((b, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--brass-bright); font-weight:600;">${b.code}</td>
+          <td>${b.citizenName}</td>
+          <td>${b.roleTitle}</td>
+          <td>${b.words.toLocaleString()}</td>
+          <td>${b.percent}% (+${b.contribRate}%)</td>
+          <td style="color: var(--vermilion); font-weight:700;">${b.totalNgau.toLocaleString()}</td>
+          <td style="font-size:0.8rem; color:var(--text-muted);">${b.date}</td>
+          <td>
+            <button class="btn-secondary" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick='reopenBillModal(${JSON.stringify(b)})'>Xem Bill</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function reopenBillModal(bill) {
+      openReceiptModal(bill);
+    }
+  </script>
+</body>
+</html>
